@@ -60,7 +60,7 @@ tag v0.2.0 / merge to main
 
 ## Develop
 
-Needs Node 22+, Python 3, git.
+Needs Node 22.23.4+ (CI uses 24), Python 3, git.
 
 ```sh
 npm ci
