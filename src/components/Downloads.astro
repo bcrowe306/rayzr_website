@@ -1,0 +1,31 @@
+---
+// The download section: rendered from the manifest synced at build time,
+// then refreshed in the browser from the live manifest (a build published
+// since the last deploy appears without waiting for the site).
+import { manifest } from '../lib/site-data';
+import { renderDownloads } from '../lib/downloads';
+const m = manifest();
+---
+
+<div data-rz-downloads set:html={renderDownloads(m)} />
+
+<script>
+	import { detectOS, MANIFEST_URL, renderDownloads, type DownloadsManifest } from '../lib/downloads';
+
+	const root = document.querySelector<HTMLElement>('[data-rz-downloads]')!;
+	function mark() {
+		const os = location.hash.slice(1) || detectOS(navigator.userAgent);
+		for (const b of root.querySelectorAll<HTMLElement>('.rz-dl-button')) b.classList.toggle('is-yours', b.dataset.os === os);
+	}
+	mark();
+	fetch(MANIFEST_URL, { cache: 'no-cache' })
+		.then((r) => (r.ok ? r.json() : null))
+		.then((m: DownloadsManifest | null) => {
+			const shown = root.querySelector<HTMLElement>('.rz-downloads')?.dataset.updated ?? '';
+			if (m && m.updated && m.updated !== shown) {
+				root.innerHTML = renderDownloads(m);
+				mark();
+			}
+		})
+		.catch(() => {});
+</script>

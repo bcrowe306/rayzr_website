@@ -1,0 +1,41 @@
+---
+// "Script it in Lua": a real script from the Platformer template beside the
+// pitch.
+import { Code } from '@astrojs/starlight/components';
+import { docsBase } from '../lib/site-data';
+
+const code = `-- A coin: the player touching it collects it.
+local Coin = {}
+
+function Coin:on_body_entered(other)
+    if self.taken or not other:has_tag("player") then return end
+    self.taken = true
+    Scene.find_node("HUD"):get_script():add_coin()
+    -- A little hop as it goes.
+    local x, y = self.node:get_position()
+    Tween.to(self.node, "position", Vec2(x, y - 10), 0.2, "out_quad",
+        { on_complete = function(n) n:destroy() end })
+end
+
+return Coin`;
+---
+
+<section class="rz-split">
+	<div class="rz-split__text">
+		<p class="rz-eyebrow">Scripting</p>
+		<h2>Lua that reloads while you play</h2>
+		<p>
+			Gameplay is plain Lua 5.4. Save a script and the running game picks it up - no restart. The built-in Code tab knows the
+			whole engine API: completion, hover docs, go to definition, rename across files and a debugger with breakpoints.
+		</p>
+		<ul class="rz-checks">
+			<li>Script properties show up in the Inspector</li>
+			<li>Signals connect events to methods with a drag</li>
+			<li>Every API function documented, with an example</li>
+		</ul>
+		<a class="rz-btn rz-btn--ghost" href={`${docsBase()}scripting/`}>The scripting guide</a>
+	</div>
+	<div class="rz-split__code">
+		<Code code={code} lang="lua" title="scripts/coin.lua" />
+	</div>
+</section>

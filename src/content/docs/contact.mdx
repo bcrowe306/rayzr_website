@@ -1,0 +1,39 @@
+---
+title: Contact & contribute
+description: How to reach the Rayzr project - email, bug reports and feature requests on GitHub - and the ways to contribute code, documentation and games.
+template: splash
+editUrl: false
+lastUpdated: false
+tableOfContents: false
+---
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { docsBase } from '../../lib/site-data';
+export const base = docsBase();
+
+## Get in touch
+
+<CardGrid>
+<Card title="Email" icon="email">
+Questions, feedback, press or anything else: [support@rayzr.app](mailto:support@rayzr.app).
+</Card>
+<Card title="Report a bug" icon="warning">
+In the editor, **Help > Report a Bug** opens a GitHub issue with your version and platform filled in. Or [open an issue](https://github.com/bcrowe306/rayzr/issues/new) yourself.
+</Card>
+<Card title="Request a feature" icon="star">
+Tell us what your game needs: [open an issue](https://github.com/bcrowe306/rayzr/issues/new) describing it, or email us.
+</Card>
+<Card title="Follow development" icon="github">
+Every merged change becomes a [development build](/download/). Watch the [repository](https://github.com/bcrowe306/rayzr) for releases.
+</Card>
+</CardGrid>
+
+## Contribute
+
+Rayzr is developed in the open on [GitHub](https://github.com/bcrowe306/rayzr). Help of every size is welcome:
+
+<CardGrid>
+<LinkCard title="Fix or improve the docs" description="Every docs page has an Edit page link. The docs live next to the code, so a fix is a small pull request." href={`${base}contributing/docs/`} />
+<LinkCard title="Contribute code" description="Build the editor, add tests and a guide, open a pull request: CI builds every platform." href={`${base}contributing/`} />
+<LinkCard title="Write a plugin" description="Extend the editor in Lua: commands, panels, inspectors, importers." href={`${base}editor/plugins/`} />
+<LinkCard title="Make a game and tell us" description="Games made with Rayzr are the best way to find what's missing. Send us a link." href="mailto:support@rayzr.app?subject=Made%20with%20Rayzr" />
+</CardGrid>

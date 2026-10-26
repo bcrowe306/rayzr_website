@@ -1,0 +1,44 @@
+---
+// Starlight's footer (edit link, last updated, previous / next) and the
+// site footer.
+import Default from '@astrojs/starlight/components/Footer.astro';
+import { docsBase } from '../lib/site-data';
+const year = new Date().getFullYear();
+---
+
+<Default />
+<div class="rz-footer">
+	<nav aria-label="Footer">
+		<a href={docsBase()}>Docs</a>
+		<a href="/features/">Features</a>
+		<a href="/download/">Download</a>
+		<a href="/contact/">Contact &amp; contribute</a>
+		<a href="https://github.com/bcrowe306/rayzr">GitHub</a>
+	</nav>
+	<p>© {year} Rayzr · <a href="mailto:support@rayzr.app">support@rayzr.app</a></p>
+</div>
+
+<style>
+	.rz-footer {
+		margin-top: 3rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--sl-color-hairline);
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+		text-align: center;
+	}
+	.rz-footer nav {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5rem 1.5rem;
+		margin-bottom: 0.75rem;
+	}
+	.rz-footer a {
+		color: var(--sl-color-gray-2);
+		text-decoration: none;
+	}
+	.rz-footer a:hover {
+		color: var(--sl-color-accent-high);
+	}
+</style>

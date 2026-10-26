@@ -1,0 +1,56 @@
+---
+// The landing page's hero: the logo, the pitch, download / get started, and
+// the editor itself.
+import { Image } from 'astro:assets';
+import logo from '../assets/rayzr-icon.png';
+import { docsBase, features } from '../lib/site-data';
+import { manifest, primaryEntryVersion } from '../lib/landing';
+
+const images = import.meta.glob<{ default: ImageMetadata }>('../generated/images/*.{png,jpg,webp}', { eager: true });
+const shot = Object.values(images)[0]?.default;
+const version = primaryEntryVersion(manifest());
+const highlight = features().features.find((f) => f.image);
+---
+
+<section class="rz-hero">
+	<div class="rz-hero__glow" aria-hidden="true"></div>
+	<div class="rz-hero__inner">
+		<Image src={logo} alt="" width={112} height={112} class="rz-hero__logo" loading="eager" />
+		<h1 class="rz-hero__title">Make 2D games.<br /><span>Ship them everywhere.</span></h1>
+		<p class="rz-hero__tagline">
+			Rayzr is a 2D game engine with a complete editor: build scenes from nodes, script them in Lua that reloads while the
+			game runs, design levels with a built-in LDtk editor, and export to macOS, Windows, Linux and the web.
+		</p>
+		<div class="rz-hero__actions">
+			<a class="rz-btn rz-btn--primary" href="/download/" data-rz-download-cta>Download Rayzr{version && <span class="rz-btn__meta">{version}</span>}</a>
+			<a class="rz-btn rz-btn--ghost" href={`${docsBase()}getting-started/first-game/`}>Make your first game</a>
+		</div>
+		<p class="rz-hero__platforms">macOS · Windows · Linux · Web export · Source on <a href="https://github.com/bcrowe306/rayzr">GitHub</a></p>
+	</div>
+	{
+		shot && (
+			<figure class="rz-hero__shot">
+				<div class="rz-window">
+					<div class="rz-window__bar" aria-hidden="true">
+						<span />
+						<span />
+						<span />
+					</div>
+					<Image src={shot} alt={highlight ? `The Rayzr editor: ${highlight.description}` : 'The Rayzr editor'} widths={[640, 1280, 1920]} sizes="(min-width: 72rem) 1100px, 100vw" loading="eager" />
+				</div>
+			</figure>
+		)
+	}
+</section>
+
+<script>
+	import { detectOS } from '../lib/downloads';
+	const os = detectOS(navigator.userAgent);
+	const names = { macos: 'macOS', windows: 'Windows', linux: 'Linux' } as const;
+	if (os) {
+		for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-rz-download-cta]')) {
+			a.firstChild!.textContent = `Download for ${names[os]}`;
+			a.href = `/download/#${os}`;
+		}
+	}
+</script>

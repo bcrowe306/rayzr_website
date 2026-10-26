@@ -1,0 +1,8 @@
+---
+// Starlight's page title, except on the landing page (its hero has the
+// headline).
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+const isHome = Astro.locals.starlightRoute.id === '';
+---
+
+{!isHome && <Default />}

@@ -1,0 +1,56 @@
+---
+// The docs version picker (top of the sidebar). Switching keeps the page
+// when the other version has it, else goes to that version's start page.
+import { siteData, type DocVersion } from '../lib/site-data';
+
+const { versions } = siteData();
+const current = (Astro.locals as { rayzrVersion?: DocVersion }).rayzrVersion;
+const data = versions.map((v) => ({ id: v.id, base: v.base, slugs: v.slugs }));
+---
+
+{
+	current && versions.length > 1 && (
+		<label class="rz-version">
+			<span class="rz-version__label">Version</span>
+			<select data-rz-version data-versions={JSON.stringify(data)} data-current={current.id} aria-label="Documentation version">
+				{versions.map((v) => (
+					<option value={v.id} selected={v.id === current.id}>
+						{v.label}
+					</option>
+				))}
+			</select>
+		</label>
+	)
+}
+
+<script>
+	import { targetPath } from '../lib/version-switch';
+	for (const select of document.querySelectorAll<HTMLSelectElement>('select[data-rz-version]')) {
+		select.addEventListener('change', () => {
+			const versions = JSON.parse(select.dataset.versions!);
+			location.href = targetPath(location.pathname, select.dataset.current!, select.value, versions) + location.hash;
+		});
+	}
+</script>
+
+<style>
+	.rz-version {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+		font-size: var(--sl-text-sm);
+	}
+	.rz-version__label {
+		color: var(--sl-color-gray-3);
+	}
+	.rz-version select {
+		flex: 1;
+		padding: 0.3rem 0.5rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.4rem;
+		background: var(--sl-color-gray-6);
+		color: var(--sl-color-white);
+		font: inherit;
+	}
+</style>

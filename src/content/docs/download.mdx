@@ -1,0 +1,34 @@
+---
+title: Download
+description: Download the Rayzr editor for macOS, Windows and Linux - the latest release, the two before it and the latest development build, with SHA-256 checksums.
+template: splash
+editUrl: false
+lastUpdated: false
+tableOfContents: false
+---
+import Downloads from '../../components/Downloads.astro';
+import { docsBase } from '../../lib/site-data';
+
+The editor is one download with everything inside: the game runners for
+every platform (any editor exports macOS, Windows, Linux and web games), the
+Lua language server and the templates.
+
+<Downloads />
+
+## Installing
+
+- **macOS**: open the `.dmg` and drag Rayzr Editor to Applications. The first
+  time, right-click it and choose **Open**.
+- **Windows**: extract the `.zip` and run `rayzr-editor.exe`. If SmartScreen
+  warns, choose **More info > Run anyway**.
+- **Linux**: make the AppImage executable (`chmod +x`) and run it, or install
+  the `.deb` with `sudo apt install ./rayzr-editor-*.deb`.
+
+The <a href={`${docsBase()}getting-started/installation/`}>installation guide</a> has the details,
+and <a href={`${docsBase()}getting-started/first-game/`}>Your first game</a> is the next step.
+
+## Verifying a download
+
+Each build has a `SHA256SUMS.txt`. Compare it with your file:
+`shasum -a 256 <file>` (macOS, Linux) or `certutil -hashfile <file> SHA256`
+(Windows).

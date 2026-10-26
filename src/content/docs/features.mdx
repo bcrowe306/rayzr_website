@@ -1,0 +1,27 @@
+---
+title: Features
+description: What Rayzr can do - the editor, Lua scripting, graphics and animation, gameplay systems, audio and input, and shipping your game. The list grows with every release.
+template: splash
+editUrl: false
+lastUpdated: false
+tableOfContents: false
+---
+import FeatureCards from '../../components/FeatureCards.astro';
+import { features } from '../../lib/site-data';
+export const data = features();
+
+Rayzr grows with every release; this list comes straight from the engine's
+repository, so it shows what the latest builds can do. Each feature links to
+its guide.
+
+{data.groups.map((g) => (
+  <section class="rz-section rz-section--tight">
+    <h2>{g}</h2>
+    <FeatureCards group={g} />
+  </section>
+))}
+
+<section class="rz-cta">
+<h2>Try it</h2>
+<p class="rz-cta__actions"><a class="rz-btn rz-btn--primary" href="/download/">Download Rayzr</a></p>
+</section>

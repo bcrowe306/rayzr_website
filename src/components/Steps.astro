@@ -1,0 +1,28 @@
+---
+import { docsBase } from '../lib/site-data';
+const base = docsBase();
+const steps = [
+	{ n: 1, title: 'Download', text: 'One app with everything inside: the editor, the game runners for every platform and the Lua tools.', href: '/download/' },
+	{ n: 2, title: 'Pick a template', text: 'Start from a complete small game - platformer, RPG, shoot \'em up or puzzle - or an empty project.', href: `${base}getting-started/templates/` },
+	{ n: 3, title: 'Play and change', text: 'Press F5. Tweak a property, paint a level, edit a script: changes show up as you make them.', href: `${base}getting-started/first-game/` },
+	{ n: 4, title: 'Export', text: 'Build a standalone game for macOS, Windows, Linux or the browser - no compiler needed.', href: `${base}guides/web-export/` },
+];
+---
+
+<section class="rz-steps">
+	<p class="rz-eyebrow">How it works</p>
+	<h2>From idea to a game you can share</h2>
+	<ol>
+		{
+			steps.map((s) => (
+				<li>
+					<span class="rz-steps__n">{s.n}</span>
+					<h3>
+						<a href={s.href}>{s.title}</a>
+					</h3>
+					<p>{s.text}</p>
+				</li>
+			))
+		}
+	</ol>
+</section>
