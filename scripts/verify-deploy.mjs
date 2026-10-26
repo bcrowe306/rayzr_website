@@ -48,7 +48,11 @@ async function page(path, mustContain = []) {
 	const res = await get(url);
 	if (res.status !== 200) return fail(`${path}: HTTP ${res.status}`);
 	const html = await res.text();
-	for (const s of mustContain) if (!html.includes(s)) return fail(`${path}: missing ${JSON.stringify(s)}`);
+	// (Each entry: a string, or alternatives - any of them.)
+	for (const s of mustContain) {
+		const any = Array.isArray(s) ? s : [s];
+		if (!any.some((a) => html.includes(a))) return fail(`${path}: missing ${JSON.stringify(s)}`);
+	}
 	ok(`${path}`);
 	return html;
 }
@@ -57,7 +61,8 @@ function internalLinks(html) {
 	const out = new Set();
 	for (const m of html.matchAll(/href="(\/[^"#?]*)/g)) {
 		const p = m[1];
-		if (!p.startsWith('//') && !p.startsWith('/_astro/')) out.add(p);
+		// (Not assets or Cloudflare's own /cdn-cgi/ endpoints.)
+		if (!p.startsWith('//') && !p.startsWith('/_astro/') && !p.startsWith('/cdn-cgi/')) out.add(p);
 	}
 	return [...out];
 }
@@ -117,7 +122,8 @@ async function main() {
 	const home = await page('/', ['Make 2D games', 'Download', 'rz-hero']);
 	await page('/features/', ['rz-cards']);
 	await page('/download/', ['data-rz-downloads']);
-	await page('/contact/', ['support@rayzr.app']);
+	// (Cloudflare's Email Address Obfuscation may encode the address: decoded in the browser.)
+	await page('/contact/', [['support@rayzr.app', 'data-cfemail']]);
 	const nf = await get(`${BASE}/this-page-does-not-exist/`);
 	if (nf.status !== 404) fail(`404 page: HTTP ${nf.status}`);
 	else ok('404 page');
