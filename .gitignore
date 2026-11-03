@@ -5,6 +5,7 @@ dist/
 .cache/
 src/generated/
 src/content/docs/docs/
+public/docs/
 # dependencies
 node_modules/
 # tests

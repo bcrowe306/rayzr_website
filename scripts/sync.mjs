@@ -19,8 +19,10 @@
 // For each version (scripts/lib/versions.mjs) it checks out only the docs
 // (a blobless clone + sparse checkout in .cache/), runs that version's own
 // scripts/docs/export_site.py, and copies the pages into
-// src/content/docs/docs/<prefix>/. It writes src/generated/: site.json
-// (versions, sidebars, page lists), manifest.json, features.json, images/.
+// src/content/docs/docs/<prefix>/ and its downloads (the tutorials' finished
+// projects, zipped) into public/<base>downloads/. It writes src/generated/:
+// site.json (versions, sidebars, page lists), manifest.json, features.json,
+// images/.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -38,6 +40,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CACHE = path.join(ROOT, '.cache');
 const DOCS_OUT = path.join(ROOT, 'src', 'content', 'docs', 'docs');
 const GEN = path.join(ROOT, 'src', 'generated');
+const PUBLIC_DOCS = path.join(ROOT, 'public', 'docs'); // (generated: the versions' downloads)
 
 const MANIFEST_URL = process.env.MANIFEST_URL || 'https://downloads.rayzr.app/manifest.json';
 const ENGINE_REPO = process.env.ENGINE_REPO || 'https://github.com/bcrowe306/rayzr.git';
@@ -154,6 +157,7 @@ async function main() {
 
 	fs.rmSync(DOCS_OUT, { recursive: true, force: true });
 	fs.rmSync(GEN, { recursive: true, force: true });
+	fs.rmSync(PUBLIC_DOCS, { recursive: true, force: true });
 	fs.mkdirSync(path.join(GEN, 'images'), { recursive: true });
 
 	let cache = null;
@@ -178,6 +182,9 @@ async function main() {
 			const bundle = JSON.parse(fs.readFileSync(path.join(out, 'bundle.json'), 'utf8'));
 			const dst = path.join(DOCS_OUT, v.prefix);
 			copyDir(path.join(out, 'pages'), dst);
+			// The pages link <base>downloads/<name>.zip (older exporters make none).
+			const downloads = path.join(out, 'downloads');
+			if (fs.existsSync(downloads)) copyDir(downloads, path.join(ROOT, 'public', ...v.base.split('/').filter(Boolean), 'downloads'));
 			const banner = versionBanner(v, defaultVersion);
 			walkMarkdown(dst, (p) => {
 				// (Only this version's pages: the default version's folder holds the others' too.)
